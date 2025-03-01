@@ -2,12 +2,12 @@
 import React from "react";
 import VideoChat from "./VideoChat";
 
-const CallContainer = () => {
+export default function CallContainer() {
   return (
     <div>
       <VideoChat />
     </div>
   );
-};
+}
 
-export default CallContainer;
+CallContainer;

@@ -5,38 +5,34 @@ export default function VideoChat() {
   const [pc, setPc] = useState();
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(new MediaStream());
-  const startWebcam = () => {
-    {
-      const peerConn = setupPeerConnection();
+  useEffect(() => {
+    const peerConn = setupPeerConnection();
 
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then((stream) => {
-          if (localVideoRef.current) {
-            localVideoRef.current.srcObject = stream;
-          }
-          stream
-            .getTracks()
-            .forEach((track) => peerConn.addTrack(track, stream));
-        })
-        .catch((err) => console.error("getUserMedia error:", err));
-
-      peerConn.ontrack = (event) => {
-        if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = event.streams[0];
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
         }
-      };
+        stream.getTracks().forEach((track) => peerConn.addTrack(track, stream));
+      })
+      .catch((err) => console.error("getUserMedia error:", err));
 
-      socket.on("connect", () => {
-        console.log("Socket connected:", socket.id);
-      });
+    peerConn.ontrack = (event) => {
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = event.streams[0];
+      }
+    };
 
-      return () => {
-        peerConn.close();
-        socket.off("connect");
-      };
-    }
-  };
+    socket.on("connect", () => {
+      console.log("Socket connected:", socket.id);
+    });
+
+    return () => {
+      peerConn.close();
+      socket.off("connect");
+    };
+  }, []);
 
   const handleCall = async () => {
     try {
@@ -49,7 +45,7 @@ export default function VideoChat() {
   return (
     <>
       <h2>Start your webcam</h2>
-      <button onClick={startWebcam}>Start webcam</button>
+      {/* <button onClick={startWebcam}>Start webcam</button> */}
       <div className="videos">
         <span>
           <h3>Local</h3>
@@ -71,7 +67,7 @@ export default function VideoChat() {
           />
         </span>
       </div>
-      <button onClick={handleCall}>Start Call</button>
+      <button onClick={handleCall}>Call everyone in the room</button>
     </>
   );
 }
