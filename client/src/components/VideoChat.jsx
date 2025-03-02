@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { makeCall, setupPeerConnection, socket } from "../services/callService";
 
-export default function VideoChat() {
+export default function VideoChat(name, roomId) {
   const [pc, setPc] = useState();
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(new MediaStream());
   useEffect(() => {
-    const peerConn = setupPeerConnection();
+    const peerConn = setupPeerConnection(name, roomId);
 
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -36,7 +36,7 @@ export default function VideoChat() {
 
   const handleCall = async () => {
     try {
-      await makeCall();
+      await makeCall(name, roomId);
     } catch (error) {
       console.error("Error initiating call:", error);
     }

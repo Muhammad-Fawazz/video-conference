@@ -11,8 +11,18 @@ const configuration = {
 let peerConnection;
 
 // This function sets up the RTCPeerConnection and the Socket.IO listeners
-export function setupPeerConnection() {
+const data = {};
+export function setupPeerConnection(name, roomId) {
     peerConnection = new RTCPeerConnection(configuration);
+    // Take data taken by form and emit give it to the server
+    data.name = name;
+    data.id = roomId;
+    socket.emit("join", { data });
+
+    // Console a list of joined users in the room
+    socket.on("joined_users", (users) => {
+        console.log("[joined] room:" + users.id + " name: " + users.name);
+    });
 
     // Listen for an offer from a remote peer
     socket.on("getOffer", async (message) => {
@@ -34,6 +44,7 @@ export function setupPeerConnection() {
             await peerConnection.setRemoteDescription(remoteDesc);
         }
     });
+
     // Listen for ICE candidates from remote peers
     socket.on("getCandidate", async (message) => {
         if (message.candidate) {
@@ -59,9 +70,9 @@ export function setupPeerConnection() {
 }
 
 // This function initiates the call by creating an offer
-export async function makeCall() {
+export async function makeCall(name, roomId) {
     if (!peerConnection) {
-        setupPeerConnection();
+        setupPeerConnection(name, roomId);
     }
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);

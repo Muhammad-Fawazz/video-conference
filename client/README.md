@@ -1,5 +1,9 @@
 # React + Vite
 
+First Commit: Added one-to-one peer connection just between the two peers directly via socket io and webRTC.
+
+2nd Commit: Added more components to handle multipple peer-to-peer connection in a room
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:

@@ -12,7 +12,7 @@ export default function CreateRoom() {
     const roomId = uuidv4();
     // save the name with the room details(if needed)
     // Navigate to the room route
-    navigate(`/room/${roomId}`);
+    navigate(`/room/${roomId}`, { state: { name } });
   };
   return (
     <>

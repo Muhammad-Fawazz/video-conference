@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import CallContainer from "./components/CallContainer.jsx";
-import JoinRoom from "./components/JoinRoom.jsx";
 import CreateRoom from "./components/CreateRoom.jsx";
 import NavBar from "./components/NavBar.jsx";
 import NoMatch from "./Components/NoMatch";
@@ -18,13 +17,12 @@ function App() {
 
   return (
     <>
-      {/* <p>{message}</p> */}
 
       <NavBar />
       <Routes>
         <Route path="/" />
         <Route path="/room/create" element={<CreateRoom />} />
-        <Route path="/room/:roomId" element={<JoinRoom />} />
+        <Route path="/room/:roomId" element={<CallContainer />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </>
